@@ -24,11 +24,15 @@
 
             const fileInput = document.getElementById('fileInput');
             const file = fileInput.files[0];
-            const webhookUrl = 'https://hook.eu2.make.com/ve24ot7s6gy8ocu41hiwhjs5l16wgm3u'; // Remplacez avec votre URL Make.com
+            const webhookUrl = 'https://hook.eu2.make.com/ve24ot7s6gy8ocu41hiwhjs5l16wgm3u';
 
-            if (file) {
+            const selectedLanguages = Array.from(document.querySelectorAll('input[name="languages"]:checked'))
+                .map(checkbox => checkbox.value);
+
+            if (file && selectedLanguages.length > 0) {
                 const formData = new FormData();
                 formData.append('file', file);
+                formData.append('languages', JSON.stringify(selectedLanguages)); // Envoyer les langues sélectionnées en tant que JSON
 
                 try {
                     const response = await fetch(webhookUrl, {
@@ -46,7 +50,7 @@
                     document.getElementById('message').textContent = 'Erreur de connexion au serveur.';
                 }
             } else {
-                alert('Veuillez sélectionner un fichier.');
+                alert('Veuillez sélectionner un fichier et au moins une langue.');
             }
         });
     </script>
