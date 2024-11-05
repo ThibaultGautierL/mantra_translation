@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload de fichier vers Make.com Webhook</title>
+</head>
+<body>
+    <h1>Uploader un fichier CSV</h1>
+    <form id="uploadForm">
+        <input type="file" id="fileInput" accept=".csv" required>
+        <button type="submit">Envoyer le fichier</button>
+    </form>
+    <p id="message"></p>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            const webhookUrl = 'https://hook.eu2.make.com/ve24ot7s6gy8ocu41hiwhjs5l16wgm3u'; // Remplacez avec votre URL Make.com
+
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    const response = await fetch(webhookUrl, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        document.getElementById('message').textContent = 'Fichier envoyé avec succès !';
+                    } else {
+                        document.getElementById('message').textContent = 'Erreur lors de l\'envoi du fichier.';
+                    }
+                } catch (error) {
+                    console.error('Erreur:', error);
+                    document.getElementById('message').textContent = 'Erreur de connexion au serveur.';
+                }
+            } else {
+                alert('Veuillez sélectionner un fichier.');
+            }
+        });
+    </script>
+</body>
+</html>
